@@ -49,7 +49,7 @@ public class Main {
         Card.printDeck(deck, "Standard Deck sorted by rank and suit", 13);
 
         Collections.reverse(deck);
-        Card.printDeck(deck, "Sorted by rank and suit reeversed", 13);
+        Card.printDeck(deck, "Sorted by rank and suit reverse", 13);
 
         List<Card> aces = new ArrayList<>(deck.subList(0, 4));
         Card.printDeck(aces, "Aces in deck", 1);
@@ -66,5 +66,58 @@ public class Main {
 
         boolean disjoint2 = Collections.disjoint(eights, aces);
         System.out.println("disjoint: " + disjoint2);
+
+        deck.sort(sortingAlgorithm);
+        Card queenOfSpades = Card.getFaceCard(Card.Suit.SPADE, 'Q');
+        int foundIndex = Collections.binarySearch(deck, queenOfSpades, sortingAlgorithm);
+        System.out.println("foundIndex: " + foundIndex);
+//        indexOf is used for unsorted collections
+        System.out.println("foundIndex: " + deck.indexOf(queenOfSpades));
+        System.out.println(deck.get(foundIndex));
+
+        Card queenOfHearts = Card.getFaceCard(Card.Suit.HEART, 'Q');
+        Collections.replaceAll(deck, queenOfHearts, queenOfSpades);
+        Card.printDeck(deck.subList(40, 44), "Queens of Spades", 1);
+
+        Collections.replaceAll(deck, queenOfSpades, queenOfHearts);
+        Card.printDeck(deck.subList(40, 44), "Queens of Hearts", 1);
+
+        if (Collections.replaceAll(deck, queenOfHearts, queenOfSpades)) {
+            System.out.println("Replaced all queens of spades with hearts");
+        } else {
+            System.out.println("Failed to replace all queens of spades with hearts");
+        }
+
+        Card.printDeck(deck.subList(40, 44), "Queens of Spades", 1);
+
+        System.out.println("Queen of Spades Card: " + Collections.frequency(deck, queenOfSpades));
+
+        System.out.println("Best Card: " + Collections.max(deck, sortingAlgorithm));
+        System.out.println("Worst Card: " + Collections.min(deck, sortingAlgorithm));
+
+        var sortBySuit = Comparator.comparing(Card::suit)
+                .thenComparing(Card::rank);
+        deck.sort(sortBySuit);
+        Card.printDeck(deck, "Sorted by Suit", 4);
+
+        List<Card> copied = new ArrayList<>(deck.subList(0, 13));
+        Collections.rotate(copied, 4);
+        System.out.println("Unrotated: " + deck.subList(0, 13));
+        System.out.println("Rotated " + 4 + ": " + copied);
+
+        copied = new ArrayList<>(deck.subList(0, 13));
+        Collections.rotate(copied, -4);
+        System.out.println("Unrotated: " + deck.subList(0, 13));
+        System.out.println("Rotated " + -4 + ": " + copied);
+
+        copied = new ArrayList<>(deck.subList(0, 13));
+        for (int i = 0; i < copied.size() / 2; i++) {
+            Collections.swap(copied, i, copied.size() - 1 - i);
+        }
+        System.out.println("Manual reverse: " + copied);
+
+        copied = new ArrayList<>(deck.subList(0, 13));
+        Collections.reverse(copied);
+        System.out.println("Using reverse: " + copied);
     }
 }
